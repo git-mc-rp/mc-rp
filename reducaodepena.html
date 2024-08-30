@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,115 +7,89 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
+            background-color: #2c2c2c;
+            color: #ffffff;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
         }
         .container {
-            background-color: white;
-            padding: 30px;
+            background-color: #4d4d4d;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 450px;
-            width: 100%;
-            border: 3px solid #9C0F0F;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 400px;
         }
         h1 {
             color: #9C0F0F;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 26px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 10px;
-            color: #9C0F0F;
         }
         input[type="number"] {
             width: 100%;
             padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
+            margin: 10px 0;
+            border: none;
             border-radius: 5px;
-            box-sizing: border-box;
-            color: #333;
-        }
-        input[type="number"]:focus {
-            border-color: #9C0F0F;
-            outline: none;
-            box-shadow: 0 0 5px rgba(156, 15, 15, 0.3);
+            font-size: 16px;
         }
         .result {
-            margin-top: 20px;
-            font-weight: bold;
             font-size: 18px;
-            color: #333;
+            margin-top: 20px;
             text-align: center;
         }
-        .footer {
-            margin-top: 30px;
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #b3b3b3;
             font-size: 14px;
-            color: #777;
-            text-align: center;
         }
-        .footer a {
+        footer a {
             color: #9C0F0F;
             text-decoration: none;
-            font-weight: bold;
-        }
-        .footer a:hover {
-            color: #6E0A0A;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h1>Sistema de Redução de Penas - Gulag</h1>
-
-        <div class="form-group">
-            <label for="hours">Quantidade de Horas (Pena Inicial):</label>
-            <input type="number" id="hours" step="0.01" min="0" placeholder="Insira a quantidade de horas" oninput="calculateReduction()">
-        </div>
-
-        <div class="form-group">
-            <label for="packs">Número de Packs Coletados:</label>
-            <input type="number" id="packs" step="1" min="0" placeholder="Insira o número de packs" oninput="calculateReduction()">
-        </div>
-
-        <div class="result" id="result">Horas restantes após redução: -- horas</div>
+        <label for="hours">Horas iniciais:</label>
+        <input type="number" id="hours" placeholder="Digite a quantidade de horas" oninput="calculatePenaltyReduction()">
+        
+        <label for="iterations">Packs entregues:</label>
+        <input type="number" id="iterations" placeholder="Digite o número de packs" oninput="calculatePenaltyReduction()">
+        
+        <div class="result" id="result"></div>
     </div>
-
-    <div class="footer">
-        <p>Link do Discord: <a href="https://discord.com/invite/laboria-minecraft-roleplay-601132132693311566" target="_blank">https://discord.com/invite/laboria-minecraft-roleplay-601132132693311566</a></p>
-        <p>MC-RP ®️ Todos direitos reservados.</p>
-    </div>
+    <footer>
+        <p><a href="https://discord.com/invite/laboria-minecraft-roleplay-601132132693311566">Discord</a> - MC-RP ®️ Todos direitos reservados.</p>
+    </footer>
 
     <script>
-        function calculateReduction() {
-            let hours = parseFloat(document.getElementById('hours').value);
-            let packs = parseInt(document.getElementById('packs').value);
+        function calculatePenaltyReduction() {
+            const hoursInput = document.getElementById('hours').value;
+            const iterationsInput = document.getElementById('iterations').value;
+            const resultElement = document.getElementById('result');
 
-            if (isNaN(hours) || isNaN(packs) || packs < 0) {
-                document.getElementById('result').innerText = 'Horas restantes após redução: -- horas';
+            if (!hoursInput || !iterationsInput) {
+                resultElement.innerHTML = "";
                 return;
             }
 
-            for (let i = 0; i < packs; i++) {
-                hours -= (hours * 0.05);
+            let totalMinutes = parseFloat(hoursInput) * 60; // Converter horas para minutos
+            const iterations = parseInt(iterationsInput);
+
+            for (let i = 0; i < iterations; i++) {
+                totalMinutes -= totalMinutes * 0.05; // Reduzir 5%
             }
 
-            document.getElementById('result').innerText = 'Horas restantes após redução: ' + hours.toFixed(2) + ' horas';
+            const finalHours = Math.floor(totalMinutes / 60);
+            const finalMinutes = Math.round(totalMinutes % 60);
+
+            resultElement.innerHTML = `Tempo restante: ${finalHours} horas e ${finalMinutes} minutos`;
         }
     </script>
-
 </body>
 </html>
